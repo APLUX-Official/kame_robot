@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kame Robot 控制器</title>
+    
+    <link rel="stylesheet" href="style.css">
+
+    <script src="socket.io.min.js"></script>
+    <script>if(typeof io === 'undefined') document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.min.js"><\/script>')</script>
+</head>
+<body>
+
+    <header>
+        <div class="app-title">🤖 Kame Robot</div>
+        <div class="status-badge">
+            <div id="dot" class="dot"></div>
+            <span id="stat">Connecting...</span>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        
+        <!-- 左侧: 参数控制 -->
+        <section class="panel-side" id="panel-params">
+            <div class="control-group">
+                <div class="group-title">
+                    <span>步数 Steps</span>
+                    <span id="steps-val" class="val-display" style="color:var(--primary-amber)">5</span>
+                </div>
+                <input class="slider-speed" type="range" min="1" max="20" value="5" 
+                       oninput="updateSteps(this.value)">
+            </div>
+
+            <div class="control-group">
+                <div class="group-title">
+                    <span>速度 Period</span>
+                    <span id="period-val" class="val-display" style="color:var(--primary-cyan)">800ms</span>
+                </div>
+                <input class="slider-gimbal" type="range" min="200" max="3000" value="800" step="100"
+                       oninput="updatePeriod(this.value)">
+                <div class="slider-label">
+                    <span>快 Fast</span>
+                    <span>慢 Slow</span>
+                </div>
+            </div>
+
+            <div class="control-group status-panel">
+                <div class="group-title"><span>状态 Status</span></div>
+                <div id="status-text" class="status-text">READY</div>
+            </div>
+        </section>
+
+        <!-- 中间: 动作按钮 -->
+        <section class="panel-center" id="panel-actions">
+            <div class="action-grid">
+
+                <div class="action-category">
+                    <div class="category-title">🦿 移动</div>
+                    <div class="action-buttons cols-3">
+                        <button class="action-btn btn-move" onclick="doAction('walk')">
+                            <span class="btn-icon">🚶</span>
+                            <span class="btn-label">Walk</span>
+                        </button>
+                        <button class="action-btn btn-move" onclick="doAction('turnL')">
+                            <span class="btn-icon">↩️</span>
+                            <span class="btn-label">Turn L</span>
+                        </button>
+                        <button class="action-btn btn-move" onclick="doAction('turnR')">
+                            <span class="btn-icon">↪️</span>
+                            <span class="btn-label">Turn R</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-category">
+                    <div class="category-title">🎭 动作</div>
+                    <div class="action-buttons cols-3">
+                        <button class="action-btn btn-dance" onclick="doAction('dance')">
+                            <span class="btn-icon">💃</span>
+                            <span class="btn-label">Dance</span>
+                        </button>
+                        <button class="action-btn btn-dance" onclick="doAction('moonwalk')">
+                            <span class="btn-icon">🌙</span>
+                            <span class="btn-label">Moonwalk</span>
+                        </button>
+                        <button class="action-btn btn-dance" onclick="doAction('hello')">
+                            <span class="btn-icon">👋</span>
+                            <span class="btn-label">Hello</span>
+                        </button>
+                        <button class="action-btn btn-dance" onclick="doAction('frontBack')">
+                            <span class="btn-icon">🔄</span>
+                            <span class="btn-label">Front Back</span>
+                        </button>
+                        <button class="action-btn btn-trick" onclick="doAction('pushUp')">
+                            <span class="btn-icon">💪</span>
+                            <span class="btn-label">Push Up</span>
+                        </button>
+                        <button class="action-btn btn-trick" onclick="doAction('upDown')">
+                            <span class="btn-icon">↕️</span>
+                            <span class="btn-label">Up Down</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-category">
+                    <div class="category-title">⚙️ 系统</div>
+                    <div class="action-buttons cols-2">
+                        <button class="action-btn btn-home" onclick="doAction('init')">
+                            <span class="btn-icon">🔧</span>
+                            <span class="btn-label">Init</span>
+                        </button>
+                        <button class="action-btn btn-home" onclick="doAction('home')">
+                            <span class="btn-icon">🏠</span>
+                            <span class="btn-label">Home</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
