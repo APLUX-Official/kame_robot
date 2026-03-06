@@ -66,5 +66,5 @@ void loop() {
 
 // === Bridge 回调 ===
 void set_action(int action) { pending_cmd = action; }
-void set_steps(int steps)   { cmd_steps  = constrain(steps, 1, 20); }
-void set_period(int period)  { cmd_period = constrain(period, 200, 5000); }
+void set_steps(int steps)   { cmd_steps  = constrain(steps, 1, 5); }
+void set_period(int period)  { cmd_period = constrain(period, 800, 2000); }

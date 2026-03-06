@@ -25,6 +25,12 @@ socket.on('status', (data) => {
         statusText.innerText = data.msg;
         statusText.className = data.busy ? "status-text busy" : "status-text ready";
     }
+    // 忙碌时禁用所有动作按钮，就绪时恢复
+    document.querySelectorAll('.action-btn').forEach(btn => {
+        btn.disabled = !!data.busy;
+        btn.style.opacity = data.busy ? '0.4' : '';
+        btn.style.pointerEvents = data.busy ? 'none' : '';
+    });
 });
 
 // === 发送动作指令 ===
@@ -46,16 +52,27 @@ function doAction(cmd) {
     }
 }
 
-// === 更新步数 ===
-function updateSteps(val) {
-    document.getElementById('steps-val').innerText = val;
-    socket.emit('steps', val);
+// === 防抖工具 ===
+function debounce(fn, delay) {
+    let timer = null;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
 }
 
-// === 更新周期 ===
+// === 更新步数（防抖 300ms） ===
+const _emitSteps = debounce((val) => socket.emit('steps', val), 300);
+function updateSteps(val) {
+    document.getElementById('steps-val').innerText = val;
+    _emitSteps(val);
+}
+
+// === 更新周期（防抖 300ms） ===
+const _emitPeriod = debounce((val) => socket.emit('period', val), 300);
 function updatePeriod(val) {
     document.getElementById('period-val').innerText = val + "ms";
-    socket.emit('period', val);
+    _emitPeriod(val);
 }
 
 // === 禁止右键菜单 ===
